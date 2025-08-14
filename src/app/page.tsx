@@ -6,12 +6,12 @@ import Footer from "./_sections/footer";
 
 export default function Page() {
   return (
-    <>
+    <div className="flex flex-col gap-16 lg:gap-32">
       <HomeSection />
       <ServicesSection />
       <ProjectsSection />
       <CompanySection />
       <Footer />
-    </>
+    </div>
   );
 }

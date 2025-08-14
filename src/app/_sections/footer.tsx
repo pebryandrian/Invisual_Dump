@@ -2,79 +2,55 @@
 
 import Link from "next/link";
 import { Separator } from "@/components/ui/separator";
-import { Mail, Phone, MapPin, Instagram, Linkedin } from "lucide-react";
 import Image from "next/image";
 
 export default function Footer() {
     return (
-        <footer className="bg-background border-t py-16 px-6">
-            <div className="max-w-6xl mx-auto grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-10 text-sm text-muted-foreground">
+        <footer className="bg-secondary py-8 px-6">
+            <div className="flex flex-col gap-8 px-6 py-8 md:px-12 md:py-12">
                 {/* Column 1: Branding */}
-                <div>
+                <div className="flex w-2/5 flex-col gap-4 md:w-1/3">
                     <Image src="/logo.svg" alt="Invisual Logo" width={40} height={40} />
-                    <p className="mt-4 text-foreground font-medium">Invisual Studio</p>
-                    <p className="mt-1">Creative minds, clear impact.</p>
-                    <p className="mt-4 text-xs text-muted-foreground">© {new Date().getFullYear()} Invisual Studio. All rights reserved.</p>
+                    <p className="mt-4 text-sm leading-relaxed lg:text-base">Invisual Studio</p>
+                    <div className="flex gap-1 text-sm text-neutral-300">
+                        Antapani Residence, Jl.Malangbong Raya Blok C10
+                    </div>
                 </div>
 
                 {/* Column 2: Navigation */}
-                <div>
-                    <h4 className="text-foreground font-semibold mb-3">Navigation</h4>
-                    <ul className="space-y-2">
-                        <li><Link href="#home" className="hover:text-primary">Home</Link></li>
-                        <li><Link href="#services" className="hover:text-primary">Services</Link></li>
-                        <li><Link href="#projects" className="hover:text-primary">Projects</Link></li>
-                        <li><Link href="#company" className="hover:text-primary">Company</Link></li>
-                    </ul>
-                </div>
+                <div className="flex w-full flex-wrap gap-8 md:w-2/3 md:flex-nowrap">
+                    <div className="flex w-2/5 flex-col gap-4 md:w-1/3">
+                        <h2 className="mb-2 font-bold">Navigation</h2>
+                        <Link href="#home" className="w-fit text-neutral-400 hover:text-primary">Home</Link>
+                        <Link href="#services" className="w-fit text-neutral-400 hover:text-primary">Services</Link>
+                        <Link href="#projects" className="w-fit text-neutral-400 hover:text-primary">Projects</Link>
+                        <Link href="#company" className="w-fit text-neutral-400 hover:text-primary">Company</Link>
+                    </div>
 
-                {/* Column 3: Social Media */}
-                <div>
-                    <h4 className="text-foreground font-semibold mb-3">Connect With Us</h4>
-                    <ul className="space-y-2">
-                        <li className="flex items-center gap-2">
-                            <Instagram className="h-4 w-4 text-primary" />
-                            <a href="https://www.instagram.com/invisual_id" target="_blank" rel="noopener noreferrer" className="hover:text-primary">
-                                Instagram
-                            </a>
-                        </li>
-                        <li className="flex items-center gap-2">
-                            <Linkedin className="h-4 w-4 text-primary" />
-                            <a href="https://www.linkedin.com/company/invisualid/" target="_blank" rel="noopener noreferrer" className="hover:text-primary">
-                                LinkedIn
-                            </a>
-                        </li>
-                    </ul>
-                </div>
+                    {/* Column 3: Social Media */}
+                    <div className="flex w-2/5 flex-col gap-4 md:w-1/3">
+                        <h2 className="mb-2 font-bold">Connect with Us</h2>
+                        <Link href="https://www.instagram.com/invisual_id" target="_blank" rel="noopener noreferrer" className="w-fit text-neutral-400 hover:text-primary">
+                            Instagram
+                        </Link>
+                        <Link href="https://www.linkedin.com/company/invisualid/" target="_blank" rel="noopener noreferrer" className="w-fit text-neutral-400 hover:text-primary">
+                            LinkedIn
+                        </Link>
+                    </div>
 
-                {/* Column 4: Contact & Location */}
-                <div>
-                    <h4 className="text-foreground font-semibold mb-3">Contact</h4>
-                    <ul className="space-y-3">
-                        <li className="flex items-start gap-2">
-                            <Mail className="h-4 w-4 mt-1 text-primary" />
-                            <a href="mailto:invisual.id@gmail.com" className="hover:text-primary">invisual.id@gmail.com</a>
-                        </li>
-                        <li className="flex items-start gap-2">
-                            <Phone className="h-4 w-4 mt-1 text-primary" />
-                            <a href="tel:+6281234567890" className="hover:text-primary">+62 822-2555-5114</a>
-                        </li>
-                        <li className="flex items-start gap-2">
-                            <MapPin className="h-4 w-4 mt-1 text-primary" />
-                            <span className="text-sm">
-                                Antapani Residence.
-                                <br />
-                                Jl.Malangbong Raya Blok C10
-                            </span>
-                        </li>
-                    </ul>
+                    {/* Column 4: Contact & Location */}
+                    <div className="flex w-2/5 flex-col gap-4 md:w-1/3">
+                        <h2 className="text-foreground font-semibold mb-3">Contact</h2>
+                        <Link href="mailto:invisual.id@gmail.com" className="w-fit text-neutral-400 hover:text-primary">invisual.id@gmail.com</Link>
+                        <Link href="tel:+6281234567890" className="w-fit text-neutral-400 hover:text-primary">+62 822-2555-5114</Link>
+                    </div>
                 </div>
             </div>
 
-            <Separator className="my-10" />
+            <Separator />
 
             {/* Bottom Credit */}
-            <div className="text-xs text-center text-muted-foreground">
+            <div className="text-xs text-center text-muted-foreground gap-4 pt-4">
                 Built with love using Next.js & ShadCN • Crafted by Invisual Studio 💙
             </div>
         </footer>

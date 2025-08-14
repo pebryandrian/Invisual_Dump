@@ -1,11 +1,17 @@
 "use client";
 
 import Link from "next/link";
-import { NavigationMenu, NavigationMenuItem, NavigationMenuLink, NavigationMenuList, navigationMenuTriggerStyle } from "@/components/ui/navigation-menu";
+import { useEffect, useState } from "react";
+import {
+    NavigationMenu,
+    NavigationMenuItem,
+    NavigationMenuLink,
+    NavigationMenuList,
+    navigationMenuTriggerStyle,
+} from "@/components/ui/navigation-menu";
 import { Button } from "@/components/ui/button";
 import { Menu } from "lucide-react";
 import Sidebar from "./sidebar";
-import { useState } from "react";
 import { DarkmodeToggle } from "@/components/common/darkmode-toggle";
 import Image from "next/image";
 
@@ -18,23 +24,52 @@ const NAV = [
 
 export default function Navbar() {
     const [open, setOpen] = useState(false);
+    const [show, setShow] = useState(true);
+    const [lastScrollY, setLastScrollY] = useState(0);
+    const [hasScrolled, setHasScrolled] = useState(false);
+
+    useEffect(() => {
+        const handleScroll = () => {
+            const currentScrollY = window.scrollY;
+
+            // Sembunyi saat scroll ke bawah
+            if (currentScrollY > lastScrollY && currentScrollY > 80) {
+                setShow(false);
+            } else {
+                setShow(true);
+            }
+
+            // Cek apakah halaman sudah di-scroll
+            setHasScrolled(currentScrollY > 0);
+            setLastScrollY(currentScrollY);
+        };
+
+        window.addEventListener("scroll", handleScroll);
+
+        return () => window.removeEventListener("scroll", handleScroll);
+    }, [lastScrollY]);
 
     return (
-        <header className="sticky top-0 z-50 w-full bg-background">
-            <div className="mx-auto flex h-13 max-w-6xl items-center justify-between px-4">
+        <header
+            className={`sticky top-0 z-50 w-full bg-background transition-all duration-300
+        ${show ? "translate-y-0" : "-translate-y-full"}
+        ${hasScrolled ? "shadow-md" : "shadow-none"}
+      `}
+        >
+            <div className="mx-auto flex h-14 max-w-6xl items-center justify-between px-4">
                 {/* Logo */}
                 <Link href="#" className="flex items-center">
                     <Image src="/logo.svg" alt="Invisual Logo" width={35} height={35} priority />
                 </Link>
 
                 {/* Desktop Nav */}
-                <nav className="hidden md:block">
+                <div className="hidden md:block">
                     <NavigationMenu>
-                        <NavigationMenuList className="gap-2">
+                        <NavigationMenuList>
                             {NAV.map((item) => (
                                 <NavigationMenuItem key={item.href}>
                                     <NavigationMenuLink asChild>
-                                        <NavigationMenuLink asChild className={navigationMenuTriggerStyle()}>
+                                        <NavigationMenuLink asChild>
                                             <Link href={item.href}>{item.label}</Link>
                                         </NavigationMenuLink>
                                     </NavigationMenuLink>
@@ -42,7 +77,7 @@ export default function Navbar() {
                             ))}
                         </NavigationMenuList>
                     </NavigationMenu>
-                </nav>
+                </div>
 
                 {/* CTA + Mobile */}
                 <div className="flex items-center gap-3">
@@ -64,7 +99,6 @@ export default function Navbar() {
                 </div>
             </div>
 
-            {/* Mobile Sidebar */}
             <Sidebar open={open} setOpen={setOpen} />
         </header>
     );
