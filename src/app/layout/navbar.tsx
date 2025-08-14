@@ -1,6 +1,8 @@
+// src/app/layout/navbar.tsx
 "use client";
 
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 import { useActiveSection } from "@/hooks/use-active-section";
 import { NavigationMenu, NavigationMenuItem, NavigationMenuLink, NavigationMenuList } from "@/components/ui/navigation-menu";
 import { Button } from "@/components/ui/button";
@@ -9,6 +11,7 @@ import Sidebar from "./sidebar";
 import { useState } from "react";
 import { DarkmodeToggle } from "@/components/common/darkmode-toggle";
 import Image from "next/image";
+import logo3 from "@/assets/logo3.png"; // Import logo tulisan Anda
 
 const NAV = [
     { href: "#home", id: "home", label: "Home" },
@@ -19,15 +22,17 @@ const NAV = [
 ] as const;
 
 export default function Navbar() {
-    const { active } = useActiveSection(0.6);
+    const pathname = usePathname();
+    const { active } = useActiveSection(); // useActiveSection() dipanggil di sini, di luar kondisi
+
     const [open, setOpen] = useState(false);
 
     return (
         <header className="sticky top-0 z-50 w-full border-b bg-background/70 backdrop-blur-md supports-[backdrop-filter]:bg-background/60">
             <div className="mx-auto flex h-16 max-w-6xl items-center justify-between px-4">
-                {/* Logo */}
+                {/* Logo Utama - Menggunakan logo3.png */}
                 <Link href="/" className="flex items-center">
-                    <Image src="/logo.svg" alt="Invisual Logo" width={37} height={40} priority />
+                    <Image src={logo3} alt="Invisual Logo" width={120} height={30} priority />
                 </Link>
 
                 {/* Desktop Nav */}
@@ -35,22 +40,27 @@ export default function Navbar() {
                     <NavigationMenu>
                         <NavigationMenuList className="gap-2">
                             {NAV.map((item) => {
-                                const isActive = active === item.id;
+                                // Logika untuk menentukan tautan aktif
+                                // Jika di halaman utama, gunakan scroll detection
+                                const isActive = pathname === "/" ? active === item.id : pathname === item.href;
+                                
                                 return (
                                     <NavigationMenuItem key={item.id}>
                                         <NavigationMenuLink asChild>
                                             <a
                                                 href={item.href}
+                                                // Gunakan aria-current untuk menandai halaman aktif
                                                 aria-current={isActive ? "page" : undefined}
                                                 className="group relative rounded-md px-3 py-2 text-sm font-medium transition-colors"
                                             >
+                                                {/* Perbaikan warna teks */}
                                                 <span className={`transition-colors ${isActive ? "text-[#0457ff]" : "text-foreground/80 group-hover:text-foreground"}`}>
                                                     {item.label}
                                                 </span>
-                                                {/* indikator aktif (bar tipis biru) */}
+                                                {/* Perbaikan indikator aktif (garis bawah) */}
                                                 <span
                                                     className={`pointer-events-none absolute inset-x-2 -bottom-[6px] h-[2px] origin-center rounded-full transition-[opacity,transform]
-                          ${isActive ? "opacity-100 scale-100 bg-[#0457ff]" : "opacity-0 scale-50 bg-[#0457ff]"}`}
+                                                ${isActive ? "opacity-100 scale-100 bg-[#0457ff]" : "opacity-0 scale-50 bg-[#0457ff]"}`}
                                                 />
                                             </a>
                                         </NavigationMenuLink>
