@@ -37,7 +37,7 @@ export default function ServicesSection() {
     return (
         <section
             id="services"
-            className="relative py-24 bg-background overflow-hidden"
+            className="container relative flex flex-col items-center gap-16 px-4 lg:flex-row lg:px-0 overflow-hidden"
         >
             <div className="mx-auto max-w-6xl px-6 text-center">
                 {/* Heading */}

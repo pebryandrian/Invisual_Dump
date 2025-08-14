@@ -99,13 +99,13 @@ const PROJECT_CATEGORIES = [
 
 export default function ProjectsSection() {
     return (
-        <section id="projects" className="py-24 bg-background px-6 sm:px-10">
+        <section id="projects" className="px-4 lg:px-0">
             <div className="max-w-6xl mx-auto">
                 <h2 className="text-3xl md:text-4xl font-bold text-foreground text-center mb-8">
                     Our <span className="text-primary">Projects</span>
                 </h2>
 
-                <Tabs defaultValue="branding" className="w-full space-y-8">
+                <Tabs defaultValue="branding" className="w-full mt-6 relative">
                     <TabsList className="flex flex-wrap justify-center gap-2">
                         {PROJECT_CATEGORIES.map((category) => (
                             <TabsTrigger
@@ -130,29 +130,29 @@ export default function ProjectsSection() {
                                             key={index}
                                             className="pl-4 md:basis-full"
                                         >
-                                            <Card className="overflow-hidden">
-                                                <Image
-                                                    src={project.image}
-                                                    alt={project.title}
-                                                    width={1620}
-                                                    height={1000}
-                                                    className="w-full h-[300px] sm:h-[400px] object-cover"
-                                                />
-                                                <CardContent className="py-4 px-6">
-                                                    <CardTitle className="text-lg text-foreground">
-                                                        {project.title}
-                                                    </CardTitle>
-                                                </CardContent>
-                                            </Card>
+                                            <div className="mx-auto max-w-5xl px-4">
+                                                <Card className="overflow-hidden">
+                                                    <Image
+                                                        src={project.image}
+                                                        alt={project.title}
+                                                        width={1620}
+                                                        height={1000}
+                                                        className="w-full aspect-[1.62] object-cover rounded-lg"
+                                                    />
+                                                    <CardContent className="py-4 px-6">
+                                                        <CardTitle className="text-lg text-foreground">
+                                                            {project.title}
+                                                        </CardTitle>
+                                                    </CardContent>
+                                                </Card>
+                                            </div>
+
                                         </CarouselItem>
                                     ))}
                                 </CarouselContent>
 
-                                {/* Tombol panah kiri */}
-                                <CarouselPrevious className="absolute left-2 -bottom-10 sm:-bottom-12" />
-
-                                {/* Tombol panah kanan */}
-                                <CarouselNext className="absolute right-2 -bottom-10 sm:-bottom-12" />
+                                <CarouselPrevious className="absolute -left-4 top-1/2 -translate-y-1/2 z-10" />
+                                <CarouselNext className="absolute -right-4 top-1/2 -translate-y-1/2 z-10" />
                             </Carousel>
 
                         </TabsContent>

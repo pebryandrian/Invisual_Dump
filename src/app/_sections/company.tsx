@@ -1,5 +1,6 @@
 "use client";
 
+import { TestimonialCarousel } from "@/components/common/testi-carousel";
 import {
     Card,
     CardHeader,
@@ -39,7 +40,7 @@ const COMPANY_STATS = [
 
 export default function CompanySection() {
     return (
-        <section id="company" className="py-24 bg-background px-6 sm:px-10">
+        <section id="company" className="container px-4 lg:px-0">
             <div className="max-w-6xl mx-auto text-center">
                 <h2 className="text-3xl md:text-4xl font-bold text-foreground mb-4">
                     Who <span className="text-primary">We Are</span>
@@ -81,10 +82,10 @@ export default function CompanySection() {
                         Trusted by brands and businesses
                     </h3>
                     <div className="flex flex-wrap justify-center items-center gap-6 opacity-80 grayscale hover:grayscale-0 transition">
-                        {["logo1.png", "logo2.png", "logo3.png", "logo4.png"].map((logo, i) => (
+                        {["logo.png", "logo.png", "logo.png", "logo.png", "logo.png", ].map((logo, i) => (
                             <Image
                                 key={i}
-                                src={`/clients/${logo}`}
+                                src={`/${logo}`}
                                 alt={`Client ${i + 1}`}
                                 className="h-10 w-auto max-w-[120px]"
                                 width={100}
@@ -99,42 +100,7 @@ export default function CompanySection() {
                     <h3 className="text-lg font-semibold text-foreground text-center mb-6">
                         What our clients say
                     </h3>
-
-                    <Carousel
-                        opts={{ align: "center", loop: true }}
-                        className="w-full max-w-3xl mx-auto"
-                    >
-                        <CarouselContent>
-                            {[
-                                {
-                                    name: "Ayla N.",
-                                    role: "Founder of Hexa Studio",
-                                    quote:
-                                        "Invisual truly understood our brand. They delivered beyond visuals — it felt like a partnership.",
-                                },
-                                {
-                                    name: "Reza F.",
-                                    role: "Marketing Lead at Luxa",
-                                    quote:
-                                        "Super impressed with the clarity and professionalism. We gained real results after the rebrand.",
-                                },
-                            ].map((t, i) => (
-                                <CarouselItem key={i}>
-                                    <Card className="text-left shadow-sm">
-                                        <CardContent className="p-6">
-                                            <p className="text-muted-foreground mb-4 italic">
-                                                “{t.quote}”
-                                            </p>
-                                            <p className="font-medium text-foreground">{t.name}</p>
-                                            <p className="text-sm text-muted-foreground">{t.role}</p>
-                                        </CardContent>
-                                    </Card>
-                                </CarouselItem>
-                            ))}
-                        </CarouselContent>
-                        <CarouselPrevious className="-left-6" />
-                        <CarouselNext className="-right-6" />
-                    </Carousel>
+                    <TestimonialCarousel />
                 </div>
 
             </div>

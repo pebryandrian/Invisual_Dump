@@ -5,6 +5,7 @@ import {
     Sheet,
     SheetClose,
     SheetContent,
+    SheetDescription,
     SheetFooter,
     SheetHeader,
     SheetTitle,
@@ -26,6 +27,9 @@ export default function Sidebar({
                     <SheetTitle>
                         INVISUAL
                     </SheetTitle>
+                    <SheetDescription className="sr-only">
+                        Sidebar navigation for main sections of the website
+                    </SheetDescription>
                 </SheetHeader>
                 <div className="grid flex-1 auto-rows-min gap-6 px-4">
                     <div className="grid gap-3">
