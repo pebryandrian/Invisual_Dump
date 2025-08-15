@@ -1,63 +1,40 @@
-"use client";
+// src/hooks/use-active-section.ts
 
-import { useEffect, useState, useRef } from "react";
-import { usePathname } from "next/navigation";
+import { useEffect, useState } from "react";
 
-const SECTION_IDS = ["home", "services", "projects", "company", "contact"] as const;
-export type SectionId = (typeof SECTION_IDS)[number];
+const sectionIds = ["home", "services", "projects", "company"] as const;
 
-export function useActiveSection(threshold = 0.3) {
-  const [active, setActive] = useState<SectionId>("home");
-  const observerRef = useRef<IntersectionObserver | null>(null);
-  const pathname = usePathname();
+export function useActiveSection() {
+  const [active, setActive] = useState<typeof sectionIds[number]>("home");
 
   useEffect(() => {
-    // Kalau bukan halaman utama, set active berdasarkan URL saja
-    if (pathname && pathname !== "/") {
-      const matched = SECTION_IDS.find((id) => pathname.includes(id));
-      if (matched) {
-        setActive(matched);
+    const handleScroll = () => {
+      let currentActive: typeof sectionIds[number] = "home";
+
+      // Cek jika pengguna berada di bagian atas halaman, tandai 'home' sebagai aktif
+      if (window.scrollY < 200) { // Menambahkan sedikit margin
+        setActive("home");
+        return;
       }
-      // Jangan bikin observer di halaman selain "/"
-      return;
-    }
-
-    // Disconnect observer lama
-    if (observerRef.current) {
-      observerRef.current.disconnect();
-    }
-
-    const sections = document.querySelectorAll<HTMLElement>("section[id]");
-    if (sections.length === 0) return;
-
-    const observer = new IntersectionObserver(
-      (entries) => {
-        let mostVisibleId = active;
-        let maxRatio = 0;
-
-        for (const entry of entries) {
-          if (entry.isIntersecting && entry.intersectionRatio > maxRatio) {
-            maxRatio = entry.intersectionRatio;
-            mostVisibleId = entry.target.id as SectionId;
+      
+      // Logika scroll yang ada
+      for (const id of sectionIds) {
+        const element = document.getElementById(id);
+        if (element) {
+          const rect = element.getBoundingClientRect();
+          if (rect.top <= window.innerHeight / 2 && rect.bottom >= window.innerHeight / 2) {
+            currentActive = id;
+            break;
           }
         }
-
-        if (mostVisibleId !== active) {
-          setActive(mostVisibleId);
-        }
-      },
-      {
-        threshold: Array.from({ length: 11 }, (_, i) => i / 10),
       }
-    );
-
-    sections.forEach((section) => observer.observe(section));
-    observerRef.current = observer;
-
-    return () => {
-      observer.disconnect();
+      
+      setActive(currentActive);
     };
-  }, [threshold, pathname]);
 
-  return { active, ids: SECTION_IDS };
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
+
+  return { active, setActive };
 }
