@@ -1,4 +1,3 @@
-// src/components/common/sidebar.tsx
 "use client";
 
 import Link from "next/link";
@@ -6,18 +5,13 @@ import {
     Sheet,
     SheetClose,
     SheetContent,
-    SheetDescription,
-    SheetFooter,
     SheetHeader,
     SheetTitle,
 } from "@/components/ui/sheet";
 import { Button } from "@/components/ui/button";
-<<<<<<< HEAD
-import { Separator } from "@/components/ui/separator";
-=======
 import type { SectionId } from "@/hooks/use-active-section";
-import Image from "next/image"; // Import Image dari next/image
-import oldLogo from "@/assets/logo2.png"; // Import logo lama Anda
+import Image from "next/image";
+import oldLogo from "@/assets/logo2.png";
 
 const NAV = [
     { href: "#home", id: "home", label: "Home" },
@@ -26,7 +20,6 @@ const NAV = [
     { href: "#company", id: "company", label: "Company" },
     { href: "#contact", id: "contact", label: "Contact" },
 ] as const;
->>>>>>> dummy
 
 export default function Sidebar({
     open,
@@ -37,41 +30,6 @@ export default function Sidebar({
 }) {
     return (
         <Sheet open={open} onOpenChange={setOpen}>
-<<<<<<< HEAD
-            <SheetContent>
-                <SheetHeader>
-                    <SheetTitle>
-                        INVISUAL
-                    </SheetTitle>
-                    <SheetDescription className="sr-only">
-                        Sidebar navigation for main sections of the website
-                    </SheetDescription>
-                </SheetHeader>
-                <div className="grid flex-1 auto-rows-min gap-6 px-4">
-                    <div className="grid gap-3">
-                        <Link href="#home">Home</Link>
-                    </div>
-                    <Separator />
-                    <div className="grid gap-3">
-                        <Link href="#services">Services</Link>
-                    </div>
-                    <Separator />
-                    <div className="grid gap-3">
-                        <Link href="#projects">Projects</Link>
-                    </div>
-                    <Separator />
-                    <div className="grid gap-3">
-                        <Link href="#company">Company</Link>
-                    </div>
-                    <Separator />
-                </div>
-                <SheetFooter>
-                    <Button type="submit">Get Started</Button>
-                    <SheetClose asChild>
-                        <Button variant="outline">Close</Button>
-                    </SheetClose>
-                </SheetFooter>
-=======
             <SheetContent side="left" className="w-[85vw] sm:w-80 flex flex-col justify-between">
                 <div>
                     <SheetHeader className="mb-4 flex flex-col items-center gap-4">
@@ -84,7 +42,7 @@ export default function Sidebar({
 
                     <nav className="flex flex-col gap-2">
                         {NAV.map((item) => {
-                            const isActive = active === item.id;
+                            const isActive = false; // Implementasi useActiveSection tidak ada di sini, jadi kita buat statis.
                             return (
                                 <Link
                                     key={item.id}
@@ -118,8 +76,6 @@ export default function Sidebar({
                     <Link href="#" className="text-xs hover:text-[#0457ff] transition-colors">LI</Link>
                     <Link href="#" className="text-xs hover:text-[#0457ff] transition-colors">BE</Link>
                 </div>
-
->>>>>>> dummy
             </SheetContent>
         </Sheet>
     );
