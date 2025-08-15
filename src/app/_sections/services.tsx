@@ -1,3 +1,7 @@
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+>>>>>>> b631f2f6886feb56ebc9d4863f4a9693dbd47839
 "use client";
 
 import {
@@ -45,6 +49,7 @@ const SERVICES = [
     },
 ];
 
+<<<<<<< HEAD
 const EXTENDED_SERVICES = [
     {
         title: "Web Development",
@@ -70,6 +75,71 @@ const EXTENDED_SERVICES = [
 ];
 
 export default function ServicesSection() {
+=======
+export default function ServicesSection() {
+=======
+// src/app/_sections/services.tsx
+
+import React from "react";
+import { Target, Megaphone, Camera } from "lucide-react";
+import Image from "next/image";
+
+import photo6 from "@/assets/6.png";
+import photo7 from "@/assets/7.png";
+import photo8 from "@/assets/8.png";
+import photo9 from "@/assets/9.png";
+import photo10 from "@/assets/10.png";
+import photo from "@/assets/11.png";
+
+export default function ServicesSection() {
+    const services = [
+        {
+            title: "Branding & Positioning",
+            desc: "Enhance your brand identity and establish a strong market presence. Our team specializes in creating unique branding strategies that resonate with your target audience and set you apart from the competition. From logo design to brand messaging, we cover all aspects to make your brand memorable.",
+            icon: Target,
+            image: photo6,
+            hoverColor: "hover:bg-pink-500",
+        },
+        {
+            title: "Social Media Management",
+            desc: "Boost your online presence and engage with your audience through effective social media strategies. We manage your profiles, create compelling content, and drive engagement to help grow your brand. Our services include content scheduling, content management, and performance analytics.",
+            icon: Megaphone,
+            image: photo7,
+            hoverColor: "hover:bg-orange-500",
+        },
+        {
+            title: "Visual Content Marketing",
+            desc: "Capture attention with stunning visual content. We specialize in creating beautiful visuals that highlight your brand. Whether it's photos, videos, or graphics, we make your content shine. We ensure your brand communicates effectively and leaves a lasting impression, enhancing all your marketing efforts.",
+            icon: Camera,
+            image: photo8,
+            hoverColor: "hover:bg-blue-500",
+        },
+        // Tiga item dummy tambahan
+        {
+            title: "Web Development",
+            desc: "We build modern, responsive, and high-performance websites tailored to your business needs. From custom landing pages to full-scale e-commerce platforms, we ensure a seamless user experience.",
+            icon: Target, // Menggunakan ikon dummy
+            image: photo6, // Menggunakan gambar dummy
+            hoverColor: "hover:bg-purple-500", // Menambahkan warna hover baru
+        },
+        {
+            title: "SEO & Content Strategy",
+            desc: "Improve your online visibility and drive organic traffic with our expert SEO and content strategies. We help you rank higher on search engines and connect with your audience through valuable content.",
+            icon: Megaphone, // Menggunakan ikon dummy
+            image: photo7, // Menggunakan gambar dummy
+            hoverColor: "hover:bg-teal-500", // Menambahkan warna hover baru
+        },
+        {
+            title: "Digital Advertising",
+            desc: "Maximize your reach with targeted digital advertising campaigns on platforms like Google Ads and social media. We manage your ads to deliver the best possible return on investment.",
+            icon: Camera, // Menggunakan ikon dummy
+            image: photo8, // Menggunakan gambar dummy
+            hoverColor: "hover:bg-red-500", // Menambahkan warna hover baru
+        },
+    ];
+
+>>>>>>> dummy
+>>>>>>> b631f2f6886feb56ebc9d4863f4a9693dbd47839
     return (
         <section id="services" className="container relative flex flex-col items-center gap-16 px-4 lg:flex-row lg:px-0 overflow-hidden">
             <div className="mx-auto max-w-6xl px-6 text-center">

@@ -214,6 +214,7 @@ export default function CompanySection() {
                                     />
                                 </div>
                                 <div className="text-center w-full">
+<<<<<<< HEAD
                                     <h4 className="font-medium">{member.name}</h4>
                                     <p className="text-sm text-muted-foreground">{member.role}</p>
                                 </div>
@@ -225,3 +226,6 @@ export default function CompanySection() {
         </section>
     );
 }
+=======
+                                    <h4 className="font
+>>>>>>> b631f2f6886feb56ebc9d4863f4a9693dbd47839
