@@ -5,9 +5,9 @@ import Image from "next/image";
 import { Button } from "@/components/ui/button";
 import { ArrowRight, ChevronLeft, ChevronRight } from "lucide-react";
 
-// Impor logo untuk hero section
-import logo2 from "@/assets/logo2.png"; 
-import logo1 from "@/assets/logo1.png"; // Impor gambar background
+// Impor logo dan gambar background
+import logo2 from "@/assets/logo2.png";
+import logo1 from "@/assets/logo1.png";
 
 // Impor semua gambar untuk slider
 import slide1 from "@/assets/slide1.png";
@@ -25,7 +25,7 @@ export default function HomeSection({ id }: { id?: string }) {
     useEffect(() => {
         const interval = setInterval(() => {
             setCurrentSlide((prev) => (prev + 1) % slides.length);
-        }, 5000); // Menggunakan 5000ms sesuai dengan kode dari main
+        }, 5000);
         return () => clearInterval(interval);
     }, []);
 
@@ -44,12 +44,12 @@ export default function HomeSection({ id }: { id?: string }) {
             prevSlide === slides.length - 1 ? 0 : prevSlide + 1
         );
     };
-    
+
     return (
         <section id="home" className="relative overflow-hidden">
             {/* BACKGROUND LOOOPING DARI LOGO1.PNG */}
-            <div 
-                className="absolute inset-0 z-0 bg-center" 
+            <div
+                className="absolute inset-0 z-0 bg-center"
                 style={{ backgroundImage: `url(${logo1.src})`, backgroundRepeat: 'repeat', backgroundSize: '150px', opacity: 0.05 }}
             />
 
@@ -117,7 +117,7 @@ export default function HomeSection({ id }: { id?: string }) {
                                 }`}
                             />
                         ))}
-                        
+
                         {/* Tombol Navigasi Prev/Next */}
                         <button
                             onClick={goToPrevSlide}
