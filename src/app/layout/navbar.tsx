@@ -1,66 +1,58 @@
+// src/components/common/Navbar.tsx
 "use client";
 
 import Link from "next/link";
-import { useEffect, useState } from "react";
 import { usePathname } from "next/navigation";
 import { useActiveSection } from "@/hooks/use-active-section";
-import {
-    NavigationMenu,
-    NavigationMenuItem,
-    NavigationMenuLink,
-    NavigationMenuList,
-    navigationMenuTriggerStyle,
-} from "@/components/ui/navigation-menu";
+import { NavigationMenu, NavigationMenuItem, NavigationMenuLink, NavigationMenuList } from "@/components/ui/navigation-menu";
 import { Button } from "@/components/ui/button";
 import { Menu } from "lucide-react";
 import Sidebar from "./sidebar";
+import { useState, useEffect } from "react";
 import { DarkmodeToggle } from "@/components/common/darkmode-toggle";
 import Image from "next/image";
 import logo3 from "@/assets/logo3.png"; // Import logo tulisan Anda
 
 const NAV = [
-    { href: "#home", label: "Home", id: "home" },
-    { href: "#services", label: "Our Services", id: "services" },
-    { href: "#projects", label: "Projects", id: "projects" },
-    { href: "#company", label: "Company", id: "company" },
+    { href: "#services", id: "services", label: "Our Services" },
+    { href: "#projects", id: "projects", label: "Projects" },
+    { href: "#company", id: "company", label: "Company" },
+    { href: "#contact", id: "contact", label: "Contact" },
 ] as const;
 
 export default function Navbar() {
     const pathname = usePathname();
-    const { active } = useActiveSection(); // useActiveSection() dipanggil di sini, di luar kondisi
+    const { active } = useActiveSection();
 
     const [open, setOpen] = useState(false);
-    const [show, setShow] = useState(true);
-    const [lastScrollY, setLastScrollY] = useState(0);
-    const [hasScrolled, setHasScrolled] = useState(false);
+    
+    // Logika scroll dihilangkan
+    // const [show, setShow] = useState(true);
+    // const [lastScrollY, setLastScrollY] = useState(0);
+    // const [hasScrolled, setHasScrolled] = useState(false);
 
-    useEffect(() => {
-        const handleScroll = () => {
-            const currentScrollY = window.scrollY;
+    // useEffect(() => {
+    //     const handleScroll = () => {
+    //         const currentScrollY = window.scrollY;
 
-            // Sembunyi saat scroll ke bawah
-            if (currentScrollY > lastScrollY && currentScrollY > 80) {
-                setShow(false);
-            } else {
-                setShow(true);
-            }
+    //         if (currentScrollY > lastScrollY && currentScrollY > 80) {
+    //             setShow(false);
+    //         } else {
+    //             setShow(true);
+    //         }
 
-            // Cek apakah halaman sudah di-scroll
-            setHasScrolled(currentScrollY > 0);
-            setLastScrollY(currentScrollY);
-        };
+    //         setHasScrolled(currentScrollY > 0);
+    //         setLastScrollY(currentScrollY);
+    //     };
 
-        window.addEventListener("scroll", handleScroll);
+    //     window.addEventListener("scroll", handleScroll);
 
-        return () => window.removeEventListener("scroll", handleScroll);
-    }, [lastScrollY]);
+    //     return () => window.removeEventListener("scroll", handleScroll);
+    // }, [lastScrollY]);
 
     return (
         <header
-            className={`sticky top-0 z-50 w-full border-b bg-background/70 backdrop-blur-md supports-[backdrop-filter]:bg-background/60 transition-all duration-300
-            ${show ? "translate-y-0" : "-translate-y-full"}
-            ${hasScrolled ? "shadow-md" : "shadow-none"}
-        `}
+            className={`sticky top-0 z-50 w-full border-b bg-background/70 backdrop-blur-md supports-[backdrop-filter]:bg-background/60 transition-all duration-300 shadow-md`}
         >
             <div className="mx-auto flex h-16 max-w-6xl items-center justify-between px-4">
                 {/* Logo Utama - Menggunakan logo3.png */}
@@ -73,23 +65,19 @@ export default function Navbar() {
                     <NavigationMenu>
                         <NavigationMenuList className="gap-2">
                             {NAV.map((item) => {
-                                // Logika untuk menentukan tautan aktif
-                                const isActive = pathname === "/" ? active === item.id : pathname === item.href;
+                                const isActive = active === item.id;
                                 
                                 return (
                                     <NavigationMenuItem key={item.id}>
                                         <NavigationMenuLink asChild>
                                             <a
                                                 href={item.href}
-                                                // Gunakan aria-current untuk menandai halaman aktif
                                                 aria-current={isActive ? "page" : undefined}
                                                 className="group relative rounded-md px-3 py-2 text-sm font-medium transition-colors"
                                             >
-                                                {/* Perbaikan warna teks */}
                                                 <span className={`transition-colors ${isActive ? "text-[#0457ff]" : "text-foreground/80 group-hover:text-foreground"}`}>
                                                     {item.label}
                                                 </span>
-                                                {/* Perbaikan indikator aktif (garis bawah) */}
                                                 <span
                                                     className={`pointer-events-none absolute inset-x-2 -bottom-[6px] h-[2px] origin-center rounded-full transition-[opacity,transform]
                                                     ${isActive ? "opacity-100 scale-100 bg-[#0457ff]" : "opacity-0 scale-50 bg-[#0457ff]"}`}

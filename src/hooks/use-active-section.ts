@@ -1,63 +1,63 @@
+// src/hooks/use-active-section.ts
 "use client";
 
 import { useEffect, useState, useRef } from "react";
-import { usePathname } from "next/navigation";
 
-const SECTION_IDS = ["home", "services", "projects", "company", "contact"] as const;
+const SECTION_IDS = [
+    "home",
+    "services",
+    "projects",
+    "company",
+    "contact",
+] as const;
 export type SectionId = (typeof SECTION_IDS)[number];
 
-export function useActiveSection(threshold = 0.3) {
-  const [active, setActive] = useState<SectionId>("home");
-  const observerRef = useRef<IntersectionObserver | null>(null);
-  const pathname = usePathname();
+export function useActiveSection(threshold = 0.5) {
+    const [active, setActive] = useState<SectionId>("home");
+    const observersRef = useRef<IntersectionObserver[]>([]);
 
-  useEffect(() => {
-    // Kalau bukan halaman utama, set active berdasarkan URL saja
-    if (pathname && pathname !== "/") {
-      const matched = SECTION_IDS.find((id) => pathname.includes(id));
-      if (matched) {
-        setActive(matched);
-      }
-      // Jangan bikin observer di halaman selain "/"
-      return;
-    }
+    useEffect(() => {
+        observersRef.current.forEach(obs => obs.disconnect());
+        observersRef.current = [];
 
-    // Disconnect observer lama
-    if (observerRef.current) {
-      observerRef.current.disconnect();
-    }
+        const sections = document.querySelectorAll("section[id]");
+        if (sections.length === 0) return;
 
-    const sections = document.querySelectorAll<HTMLElement>("section[id]");
-    if (sections.length === 0) return;
+        const obs = new IntersectionObserver(
+            (entries) => {
+                let maxRatio = 0;
+                let mostVisibleId: SectionId = active;
+                let topReached = false; // Flag untuk mendeteksi bagian atas halaman
 
-    const observer = new IntersectionObserver(
-      (entries) => {
-        let mostVisibleId = active;
-        let maxRatio = 0;
+                // Periksa apakah bagian atas halaman terlihat
+                if (window.scrollY < 10) {
+                    topReached = true;
+                }
 
-        for (const entry of entries) {
-          if (entry.isIntersecting && entry.intersectionRatio > maxRatio) {
-            maxRatio = entry.intersectionRatio;
-            mostVisibleId = entry.target.id as SectionId;
-          }
-        }
+                entries.forEach((entry) => {
+                    if (entry.isIntersecting) {
+                        if (entry.intersectionRatio > maxRatio) {
+                            maxRatio = entry.intersectionRatio;
+                            mostVisibleId = entry.target.id as SectionId;
+                        }
+                    }
+                });
 
-        if (mostVisibleId !== active) {
-          setActive(mostVisibleId);
-        }
-      },
-      {
-        threshold: Array.from({ length: 11 }, (_, i) => i / 10),
-      }
-    );
+                // Jika di bagian atas, selalu aktifkan home
+                if (topReached) {
+                    setActive("home");
+                } else if (mostVisibleId !== active) {
+                    setActive(mostVisibleId);
+                }
+            },
+            { threshold: [0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1.0] }
+        );
 
-    sections.forEach((section) => observer.observe(section));
-    observerRef.current = observer;
+        sections.forEach((el) => obs.observe(el));
+        observersRef.current.push(obs);
 
-    return () => {
-      observer.disconnect();
-    };
-  }, [threshold, pathname]);
+        return () => observersRef.current.forEach((o) => o.disconnect());
+    }, [threshold]);
 
-  return { active, ids: SECTION_IDS };
+    return { active, ids: SECTION_IDS };
 }

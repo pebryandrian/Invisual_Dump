@@ -1,30 +1,15 @@
+// src/app/_sections/services.tsx
 "use client";
 
-import {
-    Card,
-    CardContent,
-    CardHeader,
-    CardTitle,
-} from "@/components/ui/card";
-import {
-    Sparkles,
-    Share2,
-    ImageIcon,
-    Target,
-    Megaphone,
-    Camera
-} from "lucide-react";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Sparkles, Share2, ImageIcon, Target, Megaphone, Camera } from "lucide-react";
 import Image from "next/image";
 
-// Import gambar dari dummy branch
 import photo6 from "@/assets/6.png";
 import photo7 from "@/assets/7.png";
 import photo8 from "@/assets/8.png";
-import photo9 from "@/assets/9.png";
-import photo10 from "@/assets/10.png";
-import photo11 from "@/assets/11.png"; // Nama 'photo' diganti jadi 'photo11'
 
-const SERVICES = [
+const SERVICES_ICONS = [
     {
         icon: <Sparkles className="w-6 h-6 text-primary" />,
         title: "Branding & Positioning",
@@ -69,10 +54,10 @@ const EXTENDED_SERVICES = [
     },
 ];
 
-export default function ServicesSection() {
+export default function ServicesSection({ id }: { id?: string }) {
     return (
-        <section id="services" className="container relative flex flex-col items-center gap-16 px-4 lg:flex-row lg:px-0 overflow-hidden">
-            <div className="mx-auto max-w-6xl px-6 text-center">
+        <section id="services" className="border-t">
+            <div className="mx-auto max-w-6xl px-4 py-16 md:py-24 text-center">
                 {/* Heading */}
                 <h2 className="text-3xl md:text-4xl font-bold text-foreground mb-4">
                     Our <span className="text-primary">Services</span>
@@ -84,7 +69,7 @@ export default function ServicesSection() {
 
                 {/* Cards (dari main branch) */}
                 <div className="grid gap-6 md:grid-cols-3">
-                    {SERVICES.map((service, index) => (
+                    {SERVICES_ICONS.map((service, index) => (
                         <Card
                             key={index}
                             className="hover:shadow-lg transition-all group border border-border"
@@ -135,7 +120,6 @@ export default function ServicesSection() {
                         </div>
                     ))}
                 </div>
-
             </div>
         </section>
     );
