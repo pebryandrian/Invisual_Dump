@@ -84,7 +84,7 @@ export default function HomeSection({ id }: { id?: string }) {
                     </div>
 
                     {/* FOTO PLACEHOLDER DIGANTI DENGAN LOGO BARU */}
-                    <div className="mt-10 w-full md:mt-0 md:w-[42%]">
+                    <div className="mt-1    0 w-full md:mt-0 md:w-[42%]">
                         <div className="relative aspect-[4/3] w-full rounded-xl border bg-muted/30 p-1">
                             <Image
                                 src={logo2}
@@ -98,7 +98,7 @@ export default function HomeSection({ id }: { id?: string }) {
                 </div>
 
                 {/* GARIS AKSEN TEPAT DI BAWAH HERO */}
-                <div className="mt-12 h-[2px] w-24 rounded-full bg-[#0457ff]/70" />
+                <div className="mt-50 h-[2px] w-24 rounded-full bg-[#0457ff]/70" />
             </div>
 
             {/* BAGIAN SLIDER BARU DENGAN NAVIGASI DAN INDIKATOR */}

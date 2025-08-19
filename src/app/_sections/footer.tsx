@@ -1,12 +1,13 @@
 "use client";
 
+import React from "react";
 import Link from "next/link";
 import { Separator } from "@/components/ui/separator";
 import Image from "next/image";
 
 export default function Footer() {
     return (
-        <footer className="container mx-auto mt-16 bg-neutral-800 text-white md:mt-32 lg:mb-8 lg:rounded-2xl">
+        <footer id="contact" className="container mx-auto mt-16 bg-neutral-800 text-white md:mt-32 lg:mb-8 lg:rounded-2xl">
             <div className="flex flex-col gap-8 px-6 py-8 md:px-12 md:py-12">
                 <div className="flex w-full flex-col gap-8 md:flex-row md:gap-20">
                     <div className="flex w-full flex-col gap-2 md:w-1/3">
@@ -32,11 +33,14 @@ export default function Footer() {
 
                         <div className="flex w-2/5 flex-col gap-4 md:w-1/3">
                             <h2 className="mb-2 font-bold">Connect with Us</h2>
-                            <Link href="https://www.instagram.com/invisual_id" target="_blank" rel="noopener noreferrer" className="w-fit text-neutral-400 hover:text-primary">
+                            <Link href="https://www.instagram.com/invisual_studio/" target="_blank" rel="noopener noreferrer" className="w-fit text-neutral-400 hover:text-primary">
                                 Instagram
                             </Link>
                             <Link href="https://www.linkedin.com/company/invisualid/" target="_blank" rel="noopener noreferrer" className="w-fit text-neutral-400 hover:text-primary">
                                 LinkedIn
+                            </Link>
+                            <Link href="https://www.behance.net/invisualid" target="_blank" rel="noopener noreferrer" className="w-fit text-neutral-400 hover:text-primary">
+                                Behance
                             </Link>
                         </div>
 

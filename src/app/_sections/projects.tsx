@@ -1,5 +1,6 @@
 "use client";
 
+import { motion } from "framer-motion";
 import {
     Tabs,
     TabsList,
@@ -131,14 +132,16 @@ export default function ProjectsSection() {
                                             className="pl-4 md:basis-full"
                                         >
                                             <div className="mx-auto max-w-5xl px-4">
-                                                <Card className="overflow-hidden">
-                                                    <Image
-                                                        src={project.image}
-                                                        alt={project.title}
-                                                        width={1620}
-                                                        height={1000}
-                                                        className="w-full aspect-[1.62] object-cover rounded-lg"
-                                                    />
+                                                <Card className="overflow-hidden group transition-all duration-300 hover:shadow-lg hover:-translate-y-1">
+                                                    <div className="overflow-hidden">
+                                                        <Image
+                                                            src={project.image}
+                                                            alt={project.title}
+                                                            width={1620}
+                                                            height={1000}
+                                                            className="w-full aspect-[1.62] object-cover rounded-lg transition-transform duration-300 group-hover:scale-105"
+                                                        />
+                                                    </div>
                                                     <CardContent className="py-4 px-6">
                                                         <CardTitle className="text-lg text-foreground">
                                                             {project.title}

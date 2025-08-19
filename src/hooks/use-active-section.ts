@@ -1,40 +1,63 @@
 // src/hooks/use-active-section.ts
+"use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 
-const sectionIds = ["home", "services", "projects", "company"] as const;
+const SECTION_IDS = [
+    "home",
+    "services",
+    "projects",
+    "company",
+    "contact",
+] as const;
+export type SectionId = (typeof SECTION_IDS)[number];
 
-export function useActiveSection() {
-  const [active, setActive] = useState<typeof sectionIds[number]>("home");
+export function useActiveSection(threshold = 0.5) {
+    const [active, setActive] = useState<SectionId>("home");
+    const observersRef = useRef<IntersectionObserver[]>([]);
 
-  useEffect(() => {
-    const handleScroll = () => {
-      let currentActive: typeof sectionIds[number] = "home";
+    useEffect(() => {
+        observersRef.current.forEach(obs => obs.disconnect());
+        observersRef.current = [];
 
-      // Cek jika pengguna berada di bagian atas halaman, tandai 'home' sebagai aktif
-      if (window.scrollY < 200) { // Menambahkan sedikit margin
-        setActive("home");
-        return;
-      }
-      
-      // Logika scroll yang ada
-      for (const id of sectionIds) {
-        const element = document.getElementById(id);
-        if (element) {
-          const rect = element.getBoundingClientRect();
-          if (rect.top <= window.innerHeight / 2 && rect.bottom >= window.innerHeight / 2) {
-            currentActive = id;
-            break;
-          }
-        }
-      }
-      
-      setActive(currentActive);
-    };
+        const sections = document.querySelectorAll("section[id]");
+        if (sections.length === 0) return;
 
-    window.addEventListener("scroll", handleScroll);
-    return () => window.removeEventListener("scroll", handleScroll);
-  }, []);
+        const obs = new IntersectionObserver(
+            (entries) => {
+                let maxRatio = 0;
+                let mostVisibleId: SectionId = active;
+                let topReached = false; // Flag untuk mendeteksi bagian atas halaman
 
-  return { active, setActive };
+                // Periksa apakah bagian atas halaman terlihat
+                if (window.scrollY < 10) {
+                    topReached = true;
+                }
+
+                entries.forEach((entry) => {
+                    if (entry.isIntersecting) {
+                        if (entry.intersectionRatio > maxRatio) {
+                            maxRatio = entry.intersectionRatio;
+                            mostVisibleId = entry.target.id as SectionId;
+                        }
+                    }
+                });
+
+                // Jika di bagian atas, selalu aktifkan home
+                if (topReached) {
+                    setActive("home");
+                } else if (mostVisibleId !== active) {
+                    setActive(mostVisibleId);
+                }
+            },
+            { threshold: [0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1.0] }
+        );
+
+        sections.forEach((el) => obs.observe(el));
+        observersRef.current.push(obs);
+
+        return () => observersRef.current.forEach((o) => o.disconnect());
+    }, [threshold]);
+
+    return { active, ids: SECTION_IDS };
 }
