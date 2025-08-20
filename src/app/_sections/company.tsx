@@ -27,7 +27,6 @@ import client1 from "@/assets/client1.jpg";
 import client2 from "@/assets/client2.jpg";
 import client3 from "@/assets/client3.jpg";
 import client4 from "@/assets/client4.jpg";
-import client5 from "@/assets/client5.jpg"; // Tambahkan logo klien baru
 
 // Import foto dummy
 import dummyPhoto1 from "@/assets/placeholderperson.jpeg";
@@ -88,7 +87,6 @@ const CLIENT_LOGOS = [
     { logo: client2, name: "Brand B" },
     { logo: client3, name: "Brand C" },
     { logo: client4, name: "Brand D" },
-    { logo: client5, name: "Brand E" },
 ];
 
 export default function CompanySection({ id }: { id?: string }) {
@@ -297,7 +295,7 @@ export default function CompanySection({ id }: { id?: string }) {
                 <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-8 place-items-center">
                     {CLIENT_LOGOS.map((client, index) => (
                         <div key={index} className="flex flex-col items-center text-center">
-                            <div className="w-80 h-40 relative grayscale hover:grayscale-0 transition-all duration-300">
+                            <div className="w-32 h-16 relative grayscale hover:grayscale-0 transition-all duration-300">
                                 <Image
                                     src={client.logo}
                                     alt={client.name}

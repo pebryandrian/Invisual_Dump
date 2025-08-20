@@ -1,13 +1,13 @@
+// src/app/_sections/home.tsx
 "use client";
 
-import { useEffect, useState } from "react";
+import React, { useState, useEffect } from "react";
 import Image from "next/image";
-import { Button } from "@/components/ui/button";
-import { ArrowRight, ChevronLeft, ChevronRight } from "lucide-react";
+import { ChevronLeft, ChevronRight } from "lucide-react";
 
-// Impor logo dan gambar background
-import logo2 from "@/assets/logo2.png";
-import logo1 from "@/assets/logo1.png";
+// Import logo untuk hero section
+import logo2 from "@/assets/logo2.png"; 
+import logo1 from "@/assets/logo1.png"; // Impor gambar background
 
 // Impor semua gambar untuk slider
 import slide1 from "@/assets/slide1.png";
@@ -15,17 +15,20 @@ import slide2 from "@/assets/slide2.png";
 import slide3 from "@/assets/slide3.png";
 import slide4 from "@/assets/slide4.png";
 
-// Array yang berisi semua gambar untuk slider
+// Array yang berisi semua gambar
 const slides = [slide1, slide2, slide3, slide4];
 
 export default function HomeSection({ id }: { id?: string }) {
     const [currentSlide, setCurrentSlide] = useState(0);
 
-    // Autoplay
+    // useEffect untuk mengubah slide setiap 3 detik
     useEffect(() => {
         const interval = setInterval(() => {
-            setCurrentSlide((prev) => (prev + 1) % slides.length);
-        }, 5000);
+            setCurrentSlide((prevSlide) =>
+                prevSlide === slides.length - 1 ? 0 : prevSlide + 1
+            );
+        }, 3000);
+
         return () => clearInterval(interval);
     }, []);
 
@@ -46,10 +49,10 @@ export default function HomeSection({ id }: { id?: string }) {
     };
 
     return (
-        <section id="home" className="relative overflow-hidden">
+        <section id={id} className="relative overflow-hidden">
             {/* BACKGROUND LOOOPING DARI LOGO1.PNG */}
-            <div
-                className="absolute inset-0 z-0 bg-center"
+            <div 
+                className="absolute inset-0 z-0 bg-center" 
                 style={{ backgroundImage: `url(${logo1.src})`, backgroundRepeat: 'repeat', backgroundSize: '150px', opacity: 0.05 }}
             />
 
@@ -84,7 +87,7 @@ export default function HomeSection({ id }: { id?: string }) {
                     </div>
 
                     {/* FOTO PLACEHOLDER DIGANTI DENGAN LOGO BARU */}
-                    <div className="mt-1    0 w-full md:mt-0 md:w-[42%]">
+                    <div className="mt-10 w-full md:mt-0 md:w-[42%]">
                         <div className="relative aspect-[4/3] w-full rounded-xl border bg-muted/30 p-1">
                             <Image
                                 src={logo2}
@@ -98,7 +101,7 @@ export default function HomeSection({ id }: { id?: string }) {
                 </div>
 
                 {/* GARIS AKSEN TEPAT DI BAWAH HERO */}
-                <div className="mt-50 h-[2px] w-24 rounded-full bg-[#0457ff]/70" />
+                <div className="mt-12 h-[2px] w-24 rounded-full bg-[#0457ff]/70" />
             </div>
 
             {/* BAGIAN SLIDER BARU DENGAN NAVIGASI DAN INDIKATOR */}
@@ -117,7 +120,7 @@ export default function HomeSection({ id }: { id?: string }) {
                                 }`}
                             />
                         ))}
-
+                        
                         {/* Tombol Navigasi Prev/Next */}
                         <button
                             onClick={goToPrevSlide}
