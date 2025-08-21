@@ -12,7 +12,7 @@ export default function ContactSection({ id }: { id?: string }) {
     };
 
     return (
-        <section id={id} className="border-t">
+        <section id="contact" className="border-t">
             <div className="mx-auto max-w-6xl px-4 py-16 md:py-24">
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-12 md:gap-24">
                     {/* Bagian Informasi Kontak Kiri */}
