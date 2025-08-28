@@ -9,10 +9,11 @@ export default function Page() {
     return (
         <>
             <HomeSection id="home" />
-            <ServicesSection id="services" />
-            <ProjectsSection id="projects" />
-            <CompanySection id="company" />
-            <ContactSection id="contact" />
+<ServicesSection id="services" />
+<ProjectsSection id="projects" />
+<CompanySection id="company" />
+<ContactSection id="contact" />
+
             
         </>
     );

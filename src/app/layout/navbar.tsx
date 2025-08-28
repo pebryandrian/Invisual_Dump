@@ -1,6 +1,7 @@
 // src/components/common/Navbar.tsx
 "use client";
 
+import { useEffect, useState } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useActiveSection } from "@/hooks/use-active-section";
@@ -13,7 +14,6 @@ import {
 import { Button } from "@/components/ui/button";
 import { Menu } from "lucide-react";
 import Sidebar from "./sidebar";
-import { useState, useEffect } from "react";
 import { DarkmodeToggle } from "@/components/common/darkmode-toggle";
 import Image from "next/image";
 import logo3 from "@/assets/logo3.png";
@@ -31,19 +31,39 @@ export default function Navbar() {
 
   const [open, setOpen] = useState(false);
   const [hash, setHash] = useState("");
+  const [showNavbar, setShowNavbar] = useState(true);
+  const [lastScrollY, setLastScrollY] = useState(0);
 
   useEffect(() => {
     if (typeof window !== "undefined") {
       setHash(window.location.hash);
       const onHashChange = () => setHash(window.location.hash);
       window.addEventListener("hashchange", onHashChange);
-      return () => window.removeEventListener("hashchange", onHashChange);
+
+      const onScroll = () => {
+        if (window.scrollY > lastScrollY && window.scrollY > 80) {
+          // scroll ke bawah -> sembunyikan
+          setShowNavbar(false);
+        } else {
+          // scroll ke atas -> tampilkan
+          setShowNavbar(true);
+        }
+        setLastScrollY(window.scrollY);
+      };
+
+      window.addEventListener("scroll", onScroll);
+      return () => {
+        window.removeEventListener("hashchange", onHashChange);
+        window.removeEventListener("scroll", onScroll);
+      };
     }
-  }, []);
+  }, [lastScrollY]);
 
   return (
     <header
-      className={`sticky top-0 z-50 w-full border-b bg-background/70 backdrop-blur-md supports-[backdrop-filter]:bg-background/60 transition-all duration-300 shadow-md`}
+      className={`fixed top-0 z-50 w-full border-b bg-background/70 backdrop-blur-md shadow-md transform transition-all duration-500 ease-in-out ${
+        showNavbar ? "translate-y-0 opacity-100" : "-translate-y-full opacity-0"
+      }`}
     >
       <div className="mx-auto flex h-16 max-w-6xl items-center justify-between px-4">
         {/* Logo */}
@@ -62,14 +82,10 @@ export default function Navbar() {
           <NavigationMenu>
             <NavigationMenuList className="gap-2">
               {NAV.map((item) => {
-                // Logika highlight aktif
                 const isActive =
-                  (pathname.startsWith("/projects") &&
-                    item.id === "projects") || // kalau di detail project
-                  (pathname === "/" &&
-                    hash === "#projects" &&
-                    item.id === "projects") || // kalau kembali dari detail
-                  (pathname === "/" && active === item.id); // scroll-based
+                  (pathname.startsWith("/projects") && item.id === "projects") ||
+                  (pathname === "/" && hash === "#projects" && item.id === "projects") ||
+                  (pathname === "/" && active === item.id);
 
                 return (
                   <NavigationMenuItem key={item.id}>
@@ -129,4 +145,3 @@ export default function Navbar() {
     </header>
   );
 }
-    

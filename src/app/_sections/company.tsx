@@ -156,7 +156,7 @@ export default function CompanySection({ id }: { id?: string }) {
     const teamMembers = [
         {
             name: "Dea",
-            role: "Design Principal",
+            role: "Chief Financial Officer",
             photo: p1,
         },
         {

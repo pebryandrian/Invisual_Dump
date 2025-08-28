@@ -1,0 +1,40 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+enum Category {
+  BRANDING
+  SOCIAL_MEDIA
+  VISUAL
+  WEB
+  SEO
+  ADS
+}
+
+model Project {
+  id          String   @id @default(cuid())
+  title       String
+  slug String @unique
+  description String
+  image       String
+  discipline  String
+  category    Category
+  year        String
+  creativeDirector        String?
+  artDirector             String?
+  graphicDesigner         String?
+  photographer            String?
+  projectCollaborator     String?
+  copywriter              String?
+  environmentalGraphicDesign String?
+  accountExecutive        String?
+  createdAt   DateTime @default(now())
+}
+
+
+
