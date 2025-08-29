@@ -2,6 +2,7 @@
 "use client";
 
 import Image from "next/image";
+import Link from "next/link";
 import {
   Sparkles,
   Share2,
@@ -12,12 +13,15 @@ import {
   LucideProps,
 } from "lucide-react";
 import { ForwardRefExoticComponent, RefAttributes } from "react";
+
 import photo6 from "@/assets/6.png";
 import photo7 from "@/assets/7.png";
 import photo8 from "@/assets/8.png";
+
 import SectionWrapper from "@/components/common/SectionWrapper";
 import SectionHeading from "@/components/common/SectionHeading";
 import MotionWrapper from "@/components/common/MotionWrapper";
+import type { StaticImageData } from "next/image";
 
 type Service = {
   title: string;
@@ -25,8 +29,9 @@ type Service = {
   icon: ForwardRefExoticComponent<
     Omit<LucideProps, "ref"> & RefAttributes<SVGSVGElement>
   >;
-  image: any;
+  image: StaticImageData;
   hoverColor: string;
+  category: string; // ✅ ganti targetId jadi category
 };
 
 const SERVICES: Service[] = [
@@ -36,6 +41,7 @@ const SERVICES: Service[] = [
     icon: Target,
     image: photo6,
     hoverColor: "hover:bg-purple-500",
+    category: "branding",
   },
   {
     title: "Social Media Management",
@@ -43,6 +49,7 @@ const SERVICES: Service[] = [
     icon: Share2,
     image: photo7,
     hoverColor: "hover:bg-blue-500",
+    category: "social-media",
   },
   {
     title: "Visual Content Creation",
@@ -50,6 +57,7 @@ const SERVICES: Service[] = [
     icon: Camera,
     image: photo8,
     hoverColor: "hover:bg-pink-500",
+    category: "visual",
   },
   {
     title: "Web Development",
@@ -57,6 +65,7 @@ const SERVICES: Service[] = [
     icon: Code,
     image: photo6,
     hoverColor: "hover:bg-green-500",
+    category: "web",
   },
   {
     title: "SEO & Content Strategy",
@@ -64,6 +73,7 @@ const SERVICES: Service[] = [
     icon: Sparkles,
     image: photo7,
     hoverColor: "hover:bg-teal-500",
+    category: "seo",
   },
   {
     title: "Digital Advertising",
@@ -71,6 +81,7 @@ const SERVICES: Service[] = [
     icon: Megaphone,
     image: photo8,
     hoverColor: "hover:bg-red-500",
+    category: "ads",
   },
 ];
 
@@ -84,35 +95,42 @@ export default function ServicesSection({ id }: { id?: string }) {
       />
 
       <div className="grid grid-cols-1 gap-10 md:grid-cols-2 lg:grid-cols-3">
-        {SERVICES.map((service, index) => (
-          <MotionWrapper key={index} delay={index * 0.15}>
-            <div
-              className={`group flex flex-col gap-4 rounded-xl border border-border shadow-md transition-all duration-300 ${service.hoverColor} hover:shadow-lg hover:scale-[1.02]`}
-            >
-              <div className="relative aspect-square overflow-hidden rounded-t-xl">
-                <Image
-                  src={service.image}
-                  alt={service.title}
-                  width={400}
-                  height={400}
-                  className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
-                />
-              </div>
+        {SERVICES.map(
+          ({ title, desc, icon: Icon, image, hoverColor, category }, index) => (
+            <MotionWrapper key={title} delay={index * 0.15}>
+              {/* ✅ langsung arahkan ke /projects/[category] */}
+              <Link href={`/projects/${category}`}>
+                <div
+                  className={`group flex flex-col gap-4 rounded-xl border border-border shadow-md transition-all duration-300 cursor-pointer ${hoverColor} hover:shadow-lg hover:scale-[1.02]`}
+                >
+                  {/* Image Section */}
+                  <div className="relative aspect-square overflow-hidden rounded-t-xl">
+                    <Image
+                      src={image}
+                      alt={title}
+                      width={400}
+                      height={400}
+                      className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
+                    />
+                  </div>
 
-              <div className="p-6 text-left">
-                <div className="flex items-center gap-4 mb-2">
-                  <service.icon className="h-8 w-8 text-primary group-hover:text-white transition-colors" />
-                  <h3 className="text-xl font-bold group-hover:text-white transition-colors">
-                    {service.title}
-                  </h3>
+                  {/* Text Section */}
+                  <div className="p-6 text-left">
+                    <div className="flex items-center gap-4 mb-2">
+                      <Icon className="h-8 w-8 text-primary group-hover:text-white transition-colors" />
+                      <h3 className="text-xl font-bold group-hover:text-white transition-colors">
+                        {title}
+                      </h3>
+                    </div>
+                    <p className="text-sm text-muted-foreground group-hover:text-white group-hover:opacity-80 transition-colors">
+                      {desc}
+                    </p>
+                  </div>
                 </div>
-                <p className="text-sm text-muted-foreground group-hover:text-white group-hover:opacity-80 transition-colors">
-                  {service.desc}
-                </p>
-              </div>
-            </div>
-          </MotionWrapper>
-        ))}
+              </Link>
+            </MotionWrapper>
+          )
+        )}
       </div>
     </SectionWrapper>
   );

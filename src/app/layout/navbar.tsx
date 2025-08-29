@@ -18,7 +18,7 @@ import { DarkmodeToggle } from "@/components/common/darkmode-toggle";
 import Image from "next/image";
 import logo3 from "@/assets/logo3.png";
 
-const NAV = [
+const NAV_ITEMS = [
   { href: "/#services", id: "services", label: "Our Services" },
   { href: "/#projects", id: "projects", label: "Projects" },
   { href: "/#company", id: "company", label: "Company" },
@@ -34,84 +34,66 @@ export default function Navbar() {
   const [showNavbar, setShowNavbar] = useState(true);
   const [lastScrollY, setLastScrollY] = useState(0);
 
+  // Handle hash + scroll
   useEffect(() => {
-    if (typeof window !== "undefined") {
-      setHash(window.location.hash);
-      const onHashChange = () => setHash(window.location.hash);
-      window.addEventListener("hashchange", onHashChange);
+    const handleHashChange = () => setHash(window.location.hash);
+    const handleScroll = () => {
+      const currentScroll = window.scrollY;
+      setShowNavbar(!(currentScroll > lastScrollY && currentScroll > 80));
+      setLastScrollY(currentScroll);
+    };
 
-      const onScroll = () => {
-        if (window.scrollY > lastScrollY && window.scrollY > 80) {
-          // scroll ke bawah -> sembunyikan
-          setShowNavbar(false);
-        } else {
-          // scroll ke atas -> tampilkan
-          setShowNavbar(true);
-        }
-        setLastScrollY(window.scrollY);
-      };
+    window.addEventListener("hashchange", handleHashChange);
+    window.addEventListener("scroll", handleScroll);
 
-      window.addEventListener("scroll", onScroll);
-      return () => {
-        window.removeEventListener("hashchange", onHashChange);
-        window.removeEventListener("scroll", onScroll);
-      };
-    }
+    setHash(window.location.hash); // initial load
+
+    return () => {
+      window.removeEventListener("hashchange", handleHashChange);
+      window.removeEventListener("scroll", handleScroll);
+    };
   }, [lastScrollY]);
 
   return (
     <header
-      className={`fixed top-0 z-50 w-full border-b bg-background/70 backdrop-blur-md shadow-md transform transition-all duration-500 ease-in-out ${
-        showNavbar ? "translate-y-0 opacity-100" : "-translate-y-full opacity-0"
-      }`}
+      className={`fixed top-0 z-50 w-full border-b bg-background/70 backdrop-blur-md 
+        shadow-sm transition-all duration-500 ease-in-out 
+        ${showNavbar ? "translate-y-0 opacity-100" : "-translate-y-full opacity-0"}`}
     >
       <div className="mx-auto flex h-16 max-w-6xl items-center justify-between px-4">
         {/* Logo */}
         <Link href="/" className="flex items-center">
-          <Image
-            src={logo3}
-            alt="Invisual Logo"
-            width={120}
-            height={30}
-            priority
-          />
+          <Image src={logo3} alt="Invisual Logo" width={120} height={30} priority />
         </Link>
 
-        {/* Desktop Nav */}
-        <div className="hidden md:block">
+        {/* Desktop Navigation */}
+        <nav className="hidden md:block">
           <NavigationMenu>
             <NavigationMenuList className="gap-2">
-              {NAV.map((item) => {
+              {NAV_ITEMS.map(({ id, href, label }) => {
                 const isActive =
-                  (pathname.startsWith("/projects") && item.id === "projects") ||
-                  (pathname === "/" && hash === "#projects" && item.id === "projects") ||
-                  (pathname === "/" && active === item.id);
+                  (pathname.startsWith("/projects") && id === "projects") ||
+                  (pathname === "/" && hash === "#projects" && id === "projects") ||
+                  (pathname === "/" && active === id);
 
                 return (
-                  <NavigationMenuItem key={item.id}>
+                  <NavigationMenuItem key={id}>
                     <NavigationMenuLink asChild>
                       <a
-                        href={item.href}
+                        href={href}
                         aria-current={isActive ? "page" : undefined}
                         className="group relative rounded-md px-3 py-2 text-sm font-medium transition-colors"
                       >
                         <span
-                          className={`transition-colors ${
-                            isActive
-                              ? "text-[#0457ff]"
-                              : "text-foreground/80 group-hover:text-foreground"
-                          }`}
+                          className={`relative transition-colors
+                            after:absolute after:left-0 after:bottom-[-4px] after:h-[2px] after:w-0
+                            after:bg-gradient-to-r after:from-[#0457ff] after:to-[#0099ff]
+                            after:rounded-full after:transition-all after:duration-300
+                            group-hover:after:w-full
+                            ${isActive ? "text-[#0457ff] after:w-full" : "text-foreground/80"}`}
                         >
-                          {item.label}
+                          {label}
                         </span>
-                        <span
-                          className={`pointer-events-none absolute inset-x-2 -bottom-[6px] h-[2px] origin-center rounded-full transition-[opacity,transform]
-                          ${
-                            isActive
-                              ? "opacity-100 scale-100 bg-[#0457ff]"
-                              : "opacity-0 scale-50 bg-[#0457ff]"
-                          }`}
-                        />
                       </a>
                     </NavigationMenuLink>
                   </NavigationMenuItem>
@@ -119,20 +101,21 @@ export default function Navbar() {
               })}
             </NavigationMenuList>
           </NavigationMenu>
-        </div>
+        </nav>
 
         {/* CTA + Mobile */}
         <div className="flex items-center gap-3">
           <DarkmodeToggle />
           <Button
             variant="outline"
-            className="hidden md:flex border-[#0457ff] text-[#0457ff] hover:bg-[#0457ff]/10"
+            className="hidden md:flex border border-[#0457ff] text-[#0457ff] 
+              hover:bg-[#0457ff]/10 hover:shadow-md transition-all"
           >
-            <span className="h-2 w-2 rounded-full bg-[#0457ff] mr-2" />
+            <span className="h-2 w-2 rounded-full bg-gradient-to-r from-[#0457ff] to-[#0099ff] mr-2" />
             Get Started
           </Button>
           <button
-            className="md:hidden p-2 rounded-md border-none cursor-pointer"
+            className="md:hidden p-2 rounded-md hover:rotate-90 transition-transform"
             onClick={() => setOpen(true)}
             aria-label="Open menu"
           >

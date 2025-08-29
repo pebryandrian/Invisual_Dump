@@ -36,6 +36,19 @@ export default function SidebarCategories({ layout = "vertical" }: SidebarCatego
         const slug = cat.slug.toLowerCase();
         const isActive = activeCategory === slug;
 
+        // 👉 pengecualian khusus Services
+        if (slug === "services") {
+          return (
+            <Link
+              key={cat.slug}
+              href="/#services"
+              className="px-3 py-2 rounded-md whitespace-nowrap transition text-gray-600 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-700"
+            >
+              {cat.name}
+            </Link>
+          );
+        }
+
         return (
           <Link
             key={cat.slug}

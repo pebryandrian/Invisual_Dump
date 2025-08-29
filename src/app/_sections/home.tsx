@@ -37,33 +37,25 @@ const SLIDE_DURATION = 6000; // 6s
 export default function HomeSection({ id }: { id?: string }) {
   const [currentSlide, setCurrentSlide] = useState(0);
   const [progressKey, setProgressKey] = useState(0);
-
-  // swipe detection
   const [touchStartX, setTouchStartX] = useState<number | null>(null);
 
   useEffect(() => {
     const interval = setInterval(() => {
       goToNextSlide();
     }, SLIDE_DURATION);
-
     return () => clearInterval(interval);
   }, []);
 
   const goToPrevSlide = () => {
-    setCurrentSlide((prev) =>
-      prev === 0 ? slides.length - 1 : prev - 1
-    );
+    setCurrentSlide((prev) => (prev === 0 ? slides.length - 1 : prev - 1));
     setProgressKey((prev) => prev + 1);
   };
 
   const goToNextSlide = () => {
-    setCurrentSlide((prev) =>
-      prev === slides.length - 1 ? 0 : prev + 1
-    );
+    setCurrentSlide((prev) => (prev === slides.length - 1 ? 0 : prev + 1));
     setProgressKey((prev) => prev + 1);
   };
 
-  // handle swipe
   const handleTouchStart = (e: React.TouchEvent) => {
     setTouchStartX(e.touches[0].clientX);
   };
@@ -73,13 +65,9 @@ export default function HomeSection({ id }: { id?: string }) {
     const touchEndX = e.changedTouches[0].clientX;
     const diff = touchStartX - touchEndX;
 
-    if (diff > 50) {
-      // swipe kiri
-      goToNextSlide();
-    } else if (diff < -50) {
-      // swipe kanan
-      goToPrevSlide();
-    }
+    if (diff > 50) goToNextSlide();
+    else if (diff < -50) goToPrevSlide();
+
     setTouchStartX(null);
   };
 
@@ -99,20 +87,20 @@ export default function HomeSection({ id }: { id?: string }) {
           }`}
         >
           <Image
-            src={slide.image}
-            alt={slide.title}
-            fill
-            className="object-cover"
-            priority={index === 0}
-          />
-          <div className="absolute inset-0 bg-black/40" />
+  src={slide.image}
+  alt={slide.title}
+  fill
+  className="object-contain bg-black"
+/>
+
+          <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/40 to-transparent" />
 
           {/* TEXT */}
-          <div className="absolute inset-0 flex flex-col items-center justify-center md:items-end md:justify-end md:pb-20 md:pr-10 text-center md:text-right text-white px-4">
-            <h1 className="text-2xl sm:text-3xl md:text-6xl font-bold leading-tight drop-shadow-lg">
+          <div className="absolute inset-0 flex flex-col items-center justify-center md:items-end md:justify-end md:pb-24 md:pr-14 text-center md:text-right text-white px-4">
+            <h1 className="text-3xl sm:text-4xl md:text-6xl font-extrabold leading-tight drop-shadow-xl tracking-tight">
               {slide.title}
             </h1>
-            <p className="mt-3 text-sm sm:text-base md:text-lg text-neutral-200 drop-shadow-md max-w-xl">
+            <p className="mt-3 text-base sm:text-lg md:text-xl text-neutral-200/90 drop-shadow-md max-w-xl">
               {slide.subtitle}
             </p>
           </div>
@@ -120,32 +108,32 @@ export default function HomeSection({ id }: { id?: string }) {
       ))}
 
       {/* NAV BUTTONS */}
-      <div className="absolute right-2 sm:right-4 top-1/2 flex flex-col gap-3 -translate-y-1/2 z-20">
+      <div className="absolute right-2 sm:right-6 top-1/2 flex flex-col gap-3 -translate-y-1/2 z-20">
         <button
           onClick={goToNextSlide}
-          className="p-1 sm:p-2 rounded-full bg-black/40 hover:bg-black/70 text-white transition"
+          className="p-2 sm:p-3 rounded-full bg-white/20 hover:bg-white/40 text-white backdrop-blur-md transition-all duration-300 shadow-lg"
         >
-          <ChevronRight size={22} className="sm:w-7 sm:h-7" />
+          <ChevronRight size={24} className="sm:w-7 sm:h-7" />
         </button>
         <button
           onClick={goToPrevSlide}
-          className="p-1 sm:p-2 rounded-full bg-black/40 hover:bg-black/70 text-white transition"
+          className="p-2 sm:p-3 rounded-full bg-white/20 hover:bg-white/40 text-white backdrop-blur-md transition-all duration-300 shadow-lg"
         >
-          <ChevronLeft size={22} className="sm:w-7 sm:h-7" />
+          <ChevronLeft size={24} className="sm:w-7 sm:h-7" />
         </button>
       </div>
 
       {/* SLIDE INDICATOR + PROGRESS BAR */}
-      <div className="absolute bottom-4 sm:bottom-6 right-4 sm:right-10 text-white text-xs sm:text-sm tracking-wider z-20 font-light">
+      <div className="absolute bottom-6 sm:bottom-10 right-6 sm:right-14 text-white text-xs sm:text-sm tracking-wider z-20 font-light">
         <div className="flex flex-col items-end">
-          <span>
+          <span className="font-medium">
             {String(currentSlide + 1).padStart(2, "0")} /{" "}
             {String(slides.length).padStart(2, "0")}
           </span>
-          <div className="relative mt-2 w-16 sm:w-24 h-[2px] bg-white/30 overflow-hidden">
+          <div className="relative mt-2 w-20 sm:w-28 h-[3px] bg-white/30 overflow-hidden rounded-full">
             <div
               key={progressKey}
-              className="absolute left-0 top-0 h-full bg-white animate-progress"
+              className="absolute left-0 top-0 h-full bg-gradient-to-r from-[#0457ff] to-[#0099ff] animate-progress"
               style={{ animationDuration: `${SLIDE_DURATION}ms` }}
             />
           </div>

@@ -1,3 +1,4 @@
+// src/app/projects/[category]/page.tsx
 import { prisma } from "@/lib/prisma";
 import ProjectCard from "@/components/ProjectCard";
 import { getCategoryValue } from "@/app/projects/categories";
@@ -27,22 +28,39 @@ export default async function CategoryPage({ params }: CategoryPageProps) {
 
   return (
     <SectionWrapper className="flex-1">
-      <div className="-mt-10"></div>
-      <SectionHeading title="Our" highlight="Projects" align="left" />
+      {/* geser heading sedikit ke atas */}
+      <div className="-mt-10">
+        <SectionHeading title="Our" highlight="Projects" align="left" />
 
-      {projects.length === 0 ? (
-        <p className="text-muted-foreground">
-          No projects found in this category.
-        </p>
-      ) : (
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-8">
-          {projects.map((project, i) => (
-            <MotionWrapper key={project.id} delay={i * 0.15}>
-              <ProjectCard project={project} />
-            </MotionWrapper>
-          ))}
-        </div>
-      )}
+        {projects.length === 0 ? (
+          <p className="text-muted-foreground">
+            No projects found in this category.
+          </p>
+        ) : (
+          // konsisten: 2 kolom di desktop biar card lebih lebar
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 gap-8">
+            {projects.map((project, i) => (
+              <MotionWrapper key={project.id} delay={i * 0.15}>
+                {/* Wrapper group untuk hover */}
+                <div className="relative group rounded-2xl">
+  {/* Glow border */}
+  <div
+    className="absolute inset-0 rounded-2xl border border-transparent
+    group-hover:border-primary/50 group-hover:shadow-[0_0_30px_rgba(var(--primary-rgb,59,130,246),0.4)]
+    transition-all duration-500 pointer-events-none z-10"
+  />
+  
+  {/* Card */}
+  <div className="relative z-20">
+    <ProjectCard project={project} />
+  </div>
+</div>
+
+              </MotionWrapper>
+            ))}
+          </div>
+        )}
+      </div>
     </SectionWrapper>
   );
 }
