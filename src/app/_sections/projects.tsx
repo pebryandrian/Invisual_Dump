@@ -1,164 +1,76 @@
-"use client";
+// src/app/_sections/projects.tsx
+import { prisma } from "@/lib/prisma";
+import ProjectCard from "@/components/ProjectCard";
+import Link from "next/link";
+import SectionWrapper from "@/components/common/SectionWrapper";
+import SectionHeading from "@/components/common/SectionHeading";
+import { ArrowRight } from "lucide-react";
 
-import {
-    Tabs,
-    TabsList,
-    TabsTrigger,
-    TabsContent,
-} from "@/components/ui/tabs";
-import {
-    Carousel,
-    CarouselContent,
-    CarouselItem,
-    CarouselNext,
-    CarouselPrevious,
-} from "@/components/ui/carousel";
-import { Card, CardContent, CardTitle } from "@/components/ui/card";
-import Image from "next/image";
+// 🔹 Reusable Show More Button
+function ShowMoreButton({ href }: { href: string }) {
+  return (
+    <Link
+      href={href}
+      className="relative group inline-flex items-center gap-2 px-8 py-3 
+                 rounded-full font-semibold text-white 
+                 bg-primary/90 backdrop-blur-md shadow-lg
+                 transition-all duration-500
+                 hover:scale-105 hover:-translate-y-1 
+                 hover:shadow-primary/50"
+    >
+      <span className="relative z-10">Show More</span>
+      <ArrowRight
+        className="w-5 h-5 transition-transform duration-300 group-hover:translate-x-1"
+      />
+      {/* Glow ring */}
+      <span className="absolute inset-0 rounded-full bg-gradient-to-r from-primary/40 to-primary/20 
+                       opacity-0 group-hover:opacity-100 blur-xl transition duration-500" />
+    </Link>
+  );
+}
 
-const PROJECT_CATEGORIES = [
-    {
-        id: "branding",
-        label: "Branding",
-        projects: [
-            {
-                title: "Brand",
-                image: "/projects/branding1.webp",
-            },
-            {
-                title: "Brand",
-                image: "/projects/branding2.webp",
-            },
-            {
-                title: "Brand",
-                image: "/projects/branding3.webp",
-            },
-            {
-                title: "Brand",
-                image: "/projects/branding4.webp",
-            },
-            {
-                title: "Brand",
-                image: "/projects/branding5.webp",
-            },
-        ],
-    },
-    {
-        id: "social",
-        label: "Social Media",
-        projects: [
-            {
-                title: "Social Media",
-                image: "/projects/social1.webp",
-            },
-            {
-                title: "Social Media",
-                image: "/projects/social2.webp",
-            },
-            {
-                title: "Social Media",
-                image: "/projects/social3.webp",
-            },
-            {
-                title: "Social Media",
-                image: "/projects/social4.webp",
-            },
-            {
-                title: "Social Media",
-                image: "/projects/social5.webp",
-            },
-        ],
-    },
-    {
-        id: "content",
-        label: "Content",
-        projects: [
-            {
-                title: "Content",
-                image: "/projects/social5.webp",
-            },
-            {
-                title: "Content",
-                image: "/projects/social4.webp",
-            },
-            {
-                title: "Content",
-                image: "/projects/social1.webp",
-            },
-            {
-                title: "Content",
-                image: "/projects/social2.webp",
-            },
-            {
-                title: "Content",
-                image: "/projects/social3.webp",
-            },
-        ],
-    },
-];
+export default async function ProjectsSection({ id }: { id?: string }) {
+  const projects = await prisma.project.findMany({
+    orderBy: { createdAt: "desc" },
+    take: 6,
+  });
 
-export default function ProjectsSection() {
-    return (
-        <section id="projects" className="px-4 lg:px-0">
-            <div className="max-w-6xl mx-auto">
-                <h2 className="text-3xl md:text-4xl font-bold text-foreground text-center mb-8">
-                    Our <span className="text-primary">Projects</span>
-                </h2>
+  return (
+    <SectionWrapper id={id ?? "projects"}>
+      <SectionHeading title="Latest" highlight="Projects" />
 
-                <Tabs defaultValue="branding" className="w-full mt-6 relative">
-                    <TabsList className="flex flex-wrap justify-center gap-2">
-                        {PROJECT_CATEGORIES.map((category) => (
-                            <TabsTrigger
-                                key={category.id}
-                                value={category.id}
-                                className="px-4 py-2 text-sm sm:text-base"
-                            >
-                                {category.label}
-                            </TabsTrigger>
-                        ))}
-                    </TabsList>
+      {projects.length === 0 ? (
+        <p className="text-muted-foreground">No projects found.</p>
+      ) : (
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-8">
+          {projects.map((p) => (
+            <div
+              key={p.id}
+              className="group relative transform transition-all duration-300 
+                         hover:-translate-y-2 hover:scale-[1.02] 
+                         hover:shadow-xl hover:shadow-primary/20 
+                         rounded-2xl overflow-hidden"
+            >
+              {/* Glow border */}
+              <div className="absolute inset-0 rounded-2xl border border-transparent 
+                              group-hover:border-primary/50 group-hover:shadow-[0_0_30px_rgba(var(--primary-rgb),0.3)] 
+                              transition-all duration-500 pointer-events-none" />
 
-                    {PROJECT_CATEGORIES.map((category) => (
-                        <TabsContent key={category.id} value={category.id}>
-                            <Carousel
-                                opts={{ align: "start" }}
-                                className="w-full mt-6 relative"
-                            >
-                                <CarouselContent className="-ml-4">
-                                    {category.projects.map((project, index) => (
-                                        <CarouselItem
-                                            key={index}
-                                            className="pl-4 md:basis-full"
-                                        >
-                                            <div className="mx-auto max-w-5xl px-4">
-                                                <Card className="overflow-hidden">
-                                                    <Image
-                                                        src={project.image}
-                                                        alt={project.title}
-                                                        width={1620}
-                                                        height={1000}
-                                                        className="w-full aspect-[1.62] object-cover rounded-lg"
-                                                    />
-                                                    <CardContent className="py-4 px-6">
-                                                        <CardTitle className="text-lg text-foreground">
-                                                            {project.title}
-                                                        </CardTitle>
-                                                    </CardContent>
-                                                </Card>
-                                            </div>
-
-                                        </CarouselItem>
-                                    ))}
-                                </CarouselContent>
-
-                                <CarouselPrevious className="absolute -left-4 top-1/2 -translate-y-1/2 z-10" />
-                                <CarouselNext className="absolute -right-4 top-1/2 -translate-y-1/2 z-10" />
-                            </Carousel>
-
-                        </TabsContent>
-                    ))}
-                </Tabs>
+              {/* Project Card */}
+              <div className="transition-shadow duration-500 
+                              group-hover:shadow-2xl group-hover:shadow-black/20 
+                              rounded-2xl overflow-hidden">
+                <ProjectCard project={p} />
+              </div>
             </div>
-        </section>
-    );
+          ))}
+        </div>
+      )}
+
+      {/* Show More Button */}
+      <div className="mt-12 flex justify-center">
+        <ShowMoreButton href="/projects" />
+      </div>
+    </SectionWrapper>
+  );
 }

@@ -1,48 +1,50 @@
+// src/hooks/use-active-section.ts
 "use client";
 
 import { useEffect, useState, useRef } from "react";
-import { usePathname } from "next/navigation";
 
-const SECTION_IDS = ["home", "services", "projects", "company", "contact"] as const;
+const SECTION_IDS = [
+  "home",
+  "services",
+  "projects",
+  "company",
+  "contact",
+] as const;
 export type SectionId = (typeof SECTION_IDS)[number];
 
-export function useActiveSection(threshold = 0.3) {
+export function useActiveSection(threshold = 0.5) {
   const [active, setActive] = useState<SectionId>("home");
-  const observerRef = useRef<IntersectionObserver | null>(null);
-  const pathname = usePathname();
+  const observersRef = useRef<IntersectionObserver[]>([]);
 
   useEffect(() => {
-    // Kalau bukan halaman utama, set active berdasarkan URL saja
-    if (pathname && pathname !== "/") {
-      const matched = SECTION_IDS.find((id) => pathname.includes(id));
-      if (matched) {
-        setActive(matched);
-      }
-      // Jangan bikin observer di halaman selain "/"
-      return;
-    }
+    observersRef.current.forEach((obs) => obs.disconnect());
+    observersRef.current = [];
 
-    // Disconnect observer lama
-    if (observerRef.current) {
-      observerRef.current.disconnect();
-    }
-
-    const sections = document.querySelectorAll<HTMLElement>("section[id]");
+    const sections = document.querySelectorAll("section[id]");
     if (sections.length === 0) return;
 
-    const observer = new IntersectionObserver(
+    const obs = new IntersectionObserver(
       (entries) => {
-        let mostVisibleId = active;
         let maxRatio = 0;
+        let mostVisibleId: SectionId = active;
+        let topReached = false;
 
-        for (const entry of entries) {
-          if (entry.isIntersecting && entry.intersectionRatio > maxRatio) {
-            maxRatio = entry.intersectionRatio;
-            mostVisibleId = entry.target.id as SectionId;
-          }
+        if (window.scrollY < 10) {
+          topReached = true;
         }
 
-        if (mostVisibleId !== active) {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            if (entry.intersectionRatio > maxRatio) {
+              maxRatio = entry.intersectionRatio;
+              mostVisibleId = entry.target.id as SectionId;
+            }
+          }
+        });
+
+        if (topReached) {
+          setActive("home");
+        } else if (mostVisibleId !== active) {
           setActive(mostVisibleId);
         }
       },
@@ -51,13 +53,26 @@ export function useActiveSection(threshold = 0.3) {
       }
     );
 
-    sections.forEach((section) => observer.observe(section));
-    observerRef.current = observer;
+    sections.forEach((el) => obs.observe(el));
+    observersRef.current.push(obs);
 
-    return () => {
-      observer.disconnect();
+    return () => observersRef.current.forEach((o) => o.disconnect());
+  }, [threshold]);
+
+  // ✅ Tambahin listener untuk hash change (misalnya klik "Kembali")
+  useEffect(() => {
+    const handleHashChange = () => {
+      const hash = window.location.hash.replace("#", "");
+      if (SECTION_IDS.includes(hash as SectionId)) {
+        setActive(hash as SectionId);
+      }
     };
-  }, [threshold, pathname]);
+
+    window.addEventListener("hashchange", handleHashChange);
+    handleHashChange(); // cek pertama kali
+
+    return () => window.removeEventListener("hashchange", handleHashChange);
+  }, []);
 
   return { active, ids: SECTION_IDS };
 }
